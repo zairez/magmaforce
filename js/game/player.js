@@ -17,8 +17,6 @@ define(function(require) {
         this.grabkey = true;
         this.throwkey = true;
 
-        this.music = true;
-        this.musicKey = false;
     }
     Player.prototype = Object.create(Entity.prototype);
 
@@ -32,20 +30,6 @@ define(function(require) {
         }
         if (kb.check(kb.LEFT)) {
             dx += this.engine.cols - 1;
-        }
-
-        if (kb.check(kb.P) && !this.musicKey) {
-            this.music = !this.music;
-            this.musicKey = true;
-            if (this.music) {
-                this.world.start();
-            }
-            else {
-                this.world.stop();
-            }
-        }
-        if (!kb.check(kb.P)) {
-            this.musicKey = false;
         }
 
         if (kb.check(kb.D) && !this.grabkey) {
