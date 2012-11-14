@@ -39,6 +39,9 @@ define(function(require) {
         }
 
         this.music = new Sound(loader.get('stage_music'));
+        this.musicPlaying = true;
+        this.musicKey = false;
+
         this.running = false;
     }
 
@@ -144,8 +147,10 @@ define(function(require) {
 
     BallWorld.prototype.tick = function() {
         DefaultWorld.prototype.tick.call(this);
-
         this.tickcount++;
+
+        var kb = this.engine.kb;
+
         if (this.show_match_count > 0) {
             this.show_match_count--;
             if (this.show_match_count <= 0) {
@@ -186,6 +191,20 @@ define(function(require) {
             if (ballcount < 2.5*this.cols) {
                 this.generateRow();
             }
+        }
+
+        if (kb.check(kb.P) && !this.musicKey) {
+            this.musicPlaying = !this.musicPlaying;
+            this.musicKey = true;
+            if (this.musicPlaying) {
+                this.music.loop();
+            }
+            else {
+                this.music.pause();
+            }
+        }
+        if (!kb.check(kb.P)) {
+            this.musicKey = false;
         }
     };
 
@@ -289,12 +308,13 @@ define(function(require) {
     };
 
     BallWorld.prototype.start = function() {
-        if (this.running) {
+        if (this.running && this.musicPlaying) {
             this.music.loop();
         }
     };
 
     BallWorld.prototype.stop = function() {
+
         this.music.pause();
     }
 
